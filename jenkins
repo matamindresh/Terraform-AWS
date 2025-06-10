@@ -38,13 +38,12 @@ pipeline {
         sh 'terraform apply -auto-approve tfplan'
       }
     }
-    stage('Terraform Destroy') {
+
+   stage('Terraform Destroy') {
       steps {
         input message: 'Do you want to destroy infrastructure?', ok: 'Destroy'
         sh 'terraform destroy -auto-approve'
   }
 }
-
-
   }
 }
