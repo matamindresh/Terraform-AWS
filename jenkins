@@ -16,7 +16,7 @@ pipeline {
 
     stage('Checkout') {
       steps {
-        git 'https://github.com/matamindresh/Terraform-AWS.git'
+         git branch: 'main', url: 'https://github.com/matamindresh/Terraform-AWS.git'
       }
     }
 
