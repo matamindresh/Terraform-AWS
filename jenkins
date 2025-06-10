@@ -1,0 +1,42 @@
+pipeline {
+  agent any
+
+  environment {
+    AWS_ACCESS_KEY_ID     = credentials('aws-access-key')
+    AWS_SECRET_ACCESS_KEY = credentials('aws-secret-key')
+    AWS_DEFAULT_REGION    = 'us-east-1' // Change as needed
+  }
+
+  stages {
+    stage('Clean Workspace') {
+      steps {
+        cleanWs()
+      }
+    }
+
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/your-org/terraform-aws-setup.git'
+      }
+    }
+
+    stage('Terraform Init') {
+      steps {
+        sh 'terraform init'
+      }
+    }
+
+    stage('Terraform Plan') {
+      steps {
+        sh 'terraform plan -var-file="terraform.tfvars" -out=tfplan'
+      }
+    }
+
+    stage('Terraform Apply') {
+      steps {
+        input message: 'Approve deployment?', ok: 'Apply'
+        sh 'terraform apply -auto-approve tfplan'
+      }
+    }
+  }
+}
