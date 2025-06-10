@@ -16,7 +16,7 @@ pipeline {
 
     stage('Checkout') {
       steps {
-        git 'https://github.com/your-org/terraform-aws-setup.git'
+        git 'https://github.com/matamindresh/Terraform-AWS.git'
       }
     }
 
