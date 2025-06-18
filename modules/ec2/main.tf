@@ -14,7 +14,7 @@ variable "key_name" {
   type = string
 }
 
-# Security Group allowing HTTP and SSH access
+
 resource "aws_security_group" "web_sg" {
   name        = "web_sg"
   description = "Allow HTTP and SSH"
@@ -79,7 +79,7 @@ resource "aws_instance" "private_vm" {
   }
 }
 
-# Outputs (Corrected)
+
 output "public_instance_id" {
   value = aws_instance.public_vm.id
 }
