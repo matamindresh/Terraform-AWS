@@ -14,7 +14,7 @@ variable "key_name" {
   type = string
 }
 
-
+# Security Group
 resource "aws_security_group" "web_sg" {
   name        = "web_sg"
   description = "Allow HTTP and SSH"
@@ -47,19 +47,20 @@ resource "aws_security_group" "web_sg" {
 
 # Public EC2 instance with NGINX
 resource "aws_instance" "public_vm" {
-  ami                    = "ami-0c02fb55956c7d316"
+  ami                    = "ami-0c02fb55956c7d316" # Amazon Linux 2
   instance_type          = "t2.micro"
   subnet_id              = var.public_subnet_id
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.web_sg.id]
+  associate_public_ip_address = true
 
   user_data = <<-EOF
-              #!/bin/bash
-              yum update -y
-              amazon-linux-extras install nginx1 -y
-              systemctl start nginx
-              systemctl enable nginx
-              EOF
+    #!/bin/bash
+    yum update -y
+    amazon-linux-extras install nginx1 -y
+    systemctl start nginx
+    systemctl enable nginx
+  EOF
 
   tags = {
     Name = "Public-NGINX-Instance"
@@ -79,11 +80,15 @@ resource "aws_instance" "private_vm" {
   }
 }
 
-
+# Outputs
 output "public_instance_id" {
   value = aws_instance.public_vm.id
 }
 
 output "private_instance_id" {
   value = aws_instance.private_vm.id
+}
+
+output "public_ip" {
+  value = aws_instance.public_vm.public_ip
 }
